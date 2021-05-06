@@ -21,13 +21,6 @@ L.circleMarker ([34.0522, -118.2437], {
 
     }).addTo(map);
 
-//us circleMarker function 
-L.circleMarker ([34.0522, -118.2437], {
-    radius: 300,
-    color :"black",
-    fillColor: '#ffffa1'
-
- }).addTo(map);
 
 
 // We create the tile layer that will be the background of our map.
