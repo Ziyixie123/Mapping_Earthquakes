@@ -27,6 +27,16 @@ let baseMaps = {
     "Satellite": satelliteStreets
   };
 
+ // Create the earthquake layer for our map-13.6.4
+let earthquakes = new L.layerGroup();
+// We define an object that contains the overlays.
+// This overlay will be visible all the time.
+let overlays = {
+  Earthquakes: earthquakes
+};
+
+
+
 // another way to alter the map object 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
@@ -35,7 +45,7 @@ let map = L.map('mapid', {
   layers: [streets]//the layers is a list 
 })
 
-L.control.layers(baseMaps).addTo(map);
+L.control.layers(baseMaps, overlays).addTo(map);
 
 
 
@@ -62,7 +72,9 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
       layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
     }
             
-        }).addTo(map);
+        }).addTo(earthquakes);
+
+        earthquakes.addTo(map);
 
 
       
