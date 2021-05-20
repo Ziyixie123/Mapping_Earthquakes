@@ -15,6 +15,12 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	accessToken: API_KEY
 });
 
+//Deliveable III-another map
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
@@ -25,7 +31,8 @@ let map = L.map('mapid', {
 // Create a base layer that holds all three maps.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets
+  "Satellite": satelliteStreets,
+  "Dark":dark
 };
 
 // 1. Add a 2nd layer group for the tectonic plate data.
@@ -172,6 +179,58 @@ legend.onAdd = function() {
           tectonicPlates.addTo(map);
   })
 
+//deliveable II
+d3.json("https://raw.githubusercontent.com/Ziyixie123/Mapping_Earthquakes/main/The%20Earthquake_Challenge/4.5_week.geojson").then(function(data) {
+  
+  //create a style 
+  function styleInfo3(feature) {
+    return {
+      
+      opacity: 1,
+      fillOpacity: 1,
+      fillColor: getColor1(feature.properties.mag),
+      color: "#000000",
+      radius: getRadius1(feature.properties.mag),
+      stroke: true,
+      weight: 0.5
+    };
+  }
+  
+  
+  //get colour
+  
+  function getColor1(magnitude) {
+    if (magnitude > 5) {
+      return "#ea2c2c";
+    }
+    if (magnitude > 4) {
+      return "#ea822c";
+    }
+    return "#98ee00";
+  }
+//get r 
+function getRadius1(magnitude) {
+  if (magnitude === 0) {
+    return 1;
+  }
+  return magnitude * 3;
+  console.log(magnitude);
+}
+
+  //create a geoson layer with its data ....
+  L.geoJson(data, {
+    // We turn each feature into a circleMarker on the map.
+    pointToLayer: function(feature, latlng) {
+        console.log(data);
+        return L.circleMarker(latlng);
+      },
+    // We set the style for each circleMarker using our styleInfo function.
+  style: styleInfo3,
+ 
+}).addTo(majorEQ);   
+
+          majorEQ.addTo(map);
+  })
 
 
 
